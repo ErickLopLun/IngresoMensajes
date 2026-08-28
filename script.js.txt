@@ -1,0 +1,46 @@
+// Importar Firebase desde CDN
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+// Configuración de tu proyecto Firebase
+const firebaseConfig = {
+  apiKey: "TU_API_KEY",
+  authDomain: "TU_DOMINIO.firebaseapp.com",
+  projectId: "TU_PROJECT_ID",
+  storageBucket: "TU_PROJECT_ID.appspot.com",
+  messagingSenderId: "TU_SENDER_ID",
+  appId: "TU_APP_ID"
+};
+
+// Inicializar Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// Referencia al formulario
+const formulario = document.getElementById("formulario");
+const lista = document.getElementById("lista");
+
+// Guardar datos en Firestore
+formulario.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const nombre = document.getElementById("nombre").value;
+  const mensaje = document.getElementById("mensaje").value;
+
+  await addDoc(collection(db, "mensajes"), { nombre, mensaje });
+  alert("Mensaje guardado!");
+  mostrarMensajes();
+});
+
+// Mostrar datos guardados
+async function mostrarMensajes() {
+  lista.innerHTML = "";
+  const querySnapshot = await getDocs(collection(db, "mensajes"));
+  querySnapshot.forEach((doc) => {
+    const li = document.createElement("li");
+    li.textContent = `${doc.data().nombre}: ${doc.data().mensaje}`;
+    lista.appendChild(li);
+  });
+}
+
+// Cargar mensajes al inicio
+mostrarMensajes();
