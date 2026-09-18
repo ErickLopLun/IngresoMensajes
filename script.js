@@ -26,9 +26,11 @@ const lista = document.getElementById("lista");
 formulario.addEventListener("submit", async (e) => {
   e.preventDefault();
   const nombre = document.getElementById("nombre").value;
+  const contacto21 = document.getElementById("contacto21").value;
+  const contacto12 = document.getElementById("contacto12").value;
+  const contacto023 = document.getElementById("contacto023").value;
   const mensaje = document.getElementById("mensaje").value;
-
-  await addDoc(collection(db, "mensajes"), { nombre, mensaje });
+  await addDoc(collection(db, "mensajes"), { nombre, contacto21, contacto12, contacto023, mensaje });
   alert("Mensaje guardado!");
   mostrarMensajes();
 });
@@ -39,7 +41,7 @@ async function mostrarMensajes() {
   const querySnapshot = await getDocs(collection(db, "mensajes"));
   querySnapshot.forEach((doc) => {
     const li = document.createElement("li");
-    li.textContent = `${doc.data().nombre}: ${doc.data().mensaje}`;
+    li.textContent = `${doc.data().nombre}: ${doc.data().contacto21}: ${doc.data().contacto12}: ${doc.data().contacto023}: ${doc.data().mensaje}`;
     lista.appendChild(li);
   });
 }
